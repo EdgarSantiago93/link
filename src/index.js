@@ -78,8 +78,8 @@ export default class LinkTool {
      */
     this.config = {
       endpoint: config.endpoint || '',
+      fetcher: config.fetcher || undefined
     };
-
     this.nodes = {
       wrapper: null,
       container: null,
@@ -93,10 +93,12 @@ export default class LinkTool {
       linkText: null,
     };
 
+
     this._data = {
       link: '',
-      meta: {},
+      meta: {}
     };
+
 
     this.data = data;
   }
@@ -383,19 +385,23 @@ export default class LinkTool {
     this.data = { link: url };
 
     try {
-      const { body } = await (ajax.get({
-        url: this.config.endpoint,
-        data: {
-          url,
-        },
-      }));
+      let response;
 
-      this.onFetch(body);
+      if (this.config.fetcher && typeof this.config.fetcher.fetchLinkDataForUrl === 'function') {
+        response = await (this.config.fetcher.fetchLinkDataForUrl(url));
+      } else {
+        response = await (ajax.get({
+          url: this.config.endpoint,
+          data: {
+            url
+          }
+        }));
+      }
+      this.onFetch(response);
     } catch (error) {
-      this.fetchingFailed(this.api.i18n.t('Couldn\'t fetch the link data'));
+      this.fetchingFailed('Haven\'t received data from server');
     }
   }
-
   /**
    * Link data fetching callback
    *
