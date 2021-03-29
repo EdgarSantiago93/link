@@ -12,7 +12,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/editor-js/link.git"
+    "url": "git+https://github.com/EdgarSantiago93/link.git"
   },
   "main": "./dist/bundle.js",
   "scripts": {
